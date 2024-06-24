@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("ELECTRIC_PROXY")
+}
+
+model User {
+  createdAt DateTime @map("created_at")
+  email     String
+  id        String @id @db.Uuid
+  name      String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@index([name])
+
+  @@map("users")
+}
