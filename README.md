@@ -14,6 +14,7 @@ Run the sync service:
 In another tab:
 
 1. `source .env`
-1. `make prisma-migrate-dev`
+1. `make prisma-migrate-dev` - this should work
+1. `make prisma-migrate-dev` - on subsequent runs, it seems to hang on _Starting migration engine RPC server_.
 
 The prisma debug log gets to `SENDING RPC CALL`... and seems to hang, migrating nothing.
