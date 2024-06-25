@@ -2,7 +2,12 @@
 
 Steps to reproduce:
 
-1. `createdb electric_sql_debugging`
+1. `git clone git@github.com:recurser/electric-sql-debugging.git`
+1. `cd electric-sql-debugging`
+1. `yarn install`
+
+Run the sync service:
+
 1. `source .env`
 1. `make electric-proxy`
 
