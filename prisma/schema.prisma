@@ -2,16 +2,121 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator nestgraphql {
+    provider = "./node_modules/.bin/prisma-nestjs-graphql"
+    output   = "../src/@generated/prisma-nestjs-graphql"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("ELECTRIC_PROXY")
 }
 
+model Assistant {
+  createdAt DateTime @map("created_at")
+  deletedAt DateTime @map("deleted_at")
+  id        String @id @db.Uuid
+  name      String
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  organizationId     String?  @db.Uuid @map("organization_id")
+  threads   Thread[]
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User? @relation(fields: [userId], references: [id])
+  userId    String? @db.Uuid @map("user_id")
+
+  @@index([deletedAt])
+  @@index([organizationId])
+  @@index([userId])
+
+  @@map("assistants")
+}
+
+model Message {
+  content   String
+  createdAt DateTime @map("created_at")
+  id        String @id @db.Uuid
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  organizationId     String?  @db.Uuid @map("organization_id")
+  thread    Thread @relation(fields: [threadId], references: [id])
+  threadId  String  @db.Uuid @map("thread_id")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User? @relation(fields: [userId], references: [id])
+  userId    String?  @db.Uuid @map("user_id")
+
+  @@index([createdAt, threadId])
+  @@index([organizationId])
+  @@index([threadId])
+  @@index([userId])
+
+  @@map("messages")
+}
+
+model Organization {
+  assistants Assistant[]
+  createdAt DateTime @map("created_at")
+  deletedAt DateTime @map("deleted_at")
+  id        String @id @db.Uuid
+  messages Message[]
+  name      String
+  organizationUsers OrganizationUser[]
+  threads Thread[]
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([deletedAt])
+  @@index([name])
+
+  @@map("organizations")
+}
+
+model OrganizationUser {
+  createdAt DateTime @map("created_at")
+  deletedAt DateTime @map("deleted_at")
+  id        String @id @db.Uuid
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  organizationId     String?  @db.Uuid @map("organization_id")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user       User? @relation(fields: [userId], references: [id])
+  userId     String?  @db.Uuid @map("user_id")
+
+  @@index([organizationId, userId])
+
+  @@map("organization_users")
+}
+
+model Thread {
+  assistant       Assistant @relation(fields: [assistantId], references: [id])
+  assistantId     String  @db.Uuid @map("assistant_id")
+  createdAt  DateTime @map("created_at")
+  deletedAt DateTime @map("deleted_at")
+  id         String @id @db.Uuid
+  messages   Message[]
+  name       String
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  organizationId     String?  @db.Uuid @map("organization_id")
+  providerId String @map("provider_id")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       User? @relation(fields: [userId], references: [id])
+  userId     String?  @db.Uuid @map("user_id")
+
+  @@index([assistantId])
+  @@index([createdAt(sort: Desc), deletedAt, organizationId])
+  @@index([createdAt(sort: Desc), deletedAt, userId])
+  @@index([organizationId])
+  @@index([providerId])
+  @@index([userId])
+
+  @@map("threads")
+}
+
 model User {
+  assistants  Assistant[]
   createdAt DateTime @map("created_at")
   email     String
   id        String @id @db.Uuid
+  messages  Message[]
   name      String
+  organizationUsers OrganizationUser[]
+  threads  Thread[]
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([email])
