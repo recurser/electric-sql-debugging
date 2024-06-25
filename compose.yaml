@@ -26,7 +26,7 @@ services:
       DATABASE_REQUIRE_SSL: false
       ELECTRIC_WRITE_TO_PG_MODE: direct_writes
       LOG_LEVEL: debug
-      PG_PROXY_PASSWORD: password
+      PG_PROXY_PASSWORD: proxy_password
       AUTH_MODE: insecure
     ports:
       - 5133:5133

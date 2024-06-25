@@ -1,21 +1,10 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
-  url      = env("ELECTRIC_PROXY")
+  url      = "postgresql://postgres:proxy_password@localhost:65432/postgres"
 }
 
-model User {
-  createdAt DateTime @map("created_at")
-  email     String
-  id        String @id @db.Uuid
-  name      String
-  updatedAt DateTime @updatedAt @map("updated_at")
+model Item {
+  value String @id
 
-  @@index([email])
-  @@index([name])
-
-  @@map("users")
+  @@map("items")
 }

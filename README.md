@@ -8,12 +8,10 @@ Steps to reproduce:
 
 Run the sync service:
 
-1. `source .env`
 1. `make electric-proxy`
 
 In another tab:
 
-1. `source .env`
 1. `make prisma-migrate-dev` - this sometimes works, but sometimes hangs
 1. `make prisma-migrate-dev` - on subsequent runs, it seems to hang on _Starting migration engine RPC server_.
 
